@@ -1,0 +1,116 @@
+	<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+
+		$(document).ready(function() {
+			$('#startSaving').prop("disabled", true);
+			$('#stopSaving').prop("disabled", true);
+		});
+
+		var hostname = $(location).attr('hostname');
+		
+		var cio = io();
+
+
+		cio.on('streamingdata', function(msg){
+      		$('#logs').append($('<li>').text(msg));
+      	});
+
+      	cio.on('disconnect', function(){
+    		cio.disconnect();
+		});
+
+		cio.on('saveSuccessRecordCount',function(msg){
+			$("#total_saved").html('<b>'+msg+'</b>');
+		});
+
+		cio.on('displayCollectionName',function(msg){
+			$("#collection_name").html('<b>'+msg+'</b>');
+		});
+
+		cio.on('warningmsg',function(msg){
+			$("#warningElemet").html('<b>'+msg+'</b>');
+		});		
+
+		cio.on('successmsg',function(msg){
+			$("#successElement").html('<b>'+msg+'</b>');
+		});
+
+		function viewlogs(){
+			const filename = $("#filename").val() || "";
+			if( filename == "" || filename == undefined || filename == null ){
+				alert("Enter proper Filename");
+				return false;
+			}
+			$('#logs').empty();
+			$('#startSaving').prop("disabled", false);
+			cio.emit('viewlogs',{ 'filename' : filename });
+		}
+
+      	function store(){
+
+      		var hostname = $("#db_hostname").val() || "";
+      		var username = $("#db_username").val() || "";
+      		var password = $("#db_password").val() || "";
+      		var dbname = $("#db_name").val() || "";
+
+      		if( hostname != "" && username != "" && password != "" && dbname != ""  ){
+
+				$('#startSaving').prop("disabled", true);
+				$('#stopSaving').prop("disabled", false);	
+				cio.emit('storeevent', { 'userSocketID' : cio.id , 'hostName' : hostname , 'userName' : username , 'password' : password , 'dbname' : dbname });
+			}else{
+				$("#warningElemet").html('<b>Add proper mongodb credentials.</b>');
+			}
+      	}
+
+      	function stopStore(){
+      		$('#startSaving').prop("disabled", false);
+			$('#stopSaving').prop("disabled", true);
+      		cio.emit('stopStore', { 'triggerStopStore' :cio.id });
+      	}
+
+	</script>
+</head>
+<body>
+	<a title="By node.js authors (https://nodejs.org/about/resources/) [Public domain], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Node.js_logo.svg"><img width="32" alt="Node.js logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/32px-Node.js_logo.svg.png"></a>
+	<div>
+		<p><label for="">Log File Name : </label><input type="text" name="filename" id="filename" value="" placeholder="Enter absolute path of file.">
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" name="viewlogs" id="viewlogs" value="View Logs" onclick="viewlogs()"></p> 
+	</div>
+	<div>
+		<p>Enter Mongo DB credentials for storing logs at runtime :</p>
+		<p> 
+			<label for="">DB Hostname : </label><input type="text" name="db_hostname" id="db_hostname" placeholder="Enter DB hostname">&nbsp;&nbsp;
+			<label for="">DB Name : </label><input type="text" name="db_name" id="db_name" placeholder="Enter Databse Name">&nbsp;&nbsp;	
+		</p>
+		<p>	
+			<label for="">DB Username : </label><input type="text" name="db_username" id="db_username" placeholder="Enter DB Username">&nbsp;&nbsp;	
+			<label for="">DB Password : </label><input type="text" name="db_password" id="db_password" placeholder="Enter DB Password">&nbsp;&nbsp;	
+		</p>
+	</div>
+<div>
+	<p id="warningElemet" style="color:#EB3E4A;font-family: arial;font-weight: lighter;"></p>
+	<p id="successElement" style="color:#42BA78;font-family: arial;font-weight: lighter;"></p>
+	<p>
+		<span id="startSpan"><input type="button" value="Start" name="startSaving" id="startSaving" onclick="store();"></span>
+		<span id="stopSpan"><input type="button" name="Stop" id="stopSaving" value="stop" onclick="stopStore();"></span>
+		 
+		<label>Records saved count :<label><span id="total_saved"></span>&nbsp;&nbsp;<label for="">For Collection Name : </label><span id="collection_name"></span>
+		</p>
+	</p>
+
+</div>
+	<p style='border-bottom: 1px #000000 solid;'>
+		Logs will be displayed below.
+	</p>
+	<div>
+		<ul id="logs"></ul>
+	</div>
+</body>
+</html>

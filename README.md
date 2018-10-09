@@ -39,7 +39,7 @@ requires
 * ### Server side
 ```sh
  Browse to the applicatin folder
- $ node start
+ $ npm start
 ```
 
 * ### Client Side
