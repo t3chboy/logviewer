@@ -1,7 +1,7 @@
 # logviewer
-View log files remotely acting as tail -f command and also save them to MongoDB in runtime.
+View remote log files and get updates from them like running tail -f command and also save them to MongoDB in runtime.
 
-![NodeJS](https://img.shields.io/badge/Powered%20by-NODEJS-brightgreen.svg)
+![NodeJS](https://img.shields.io/badge/Powered%20by-NODEJS-brightgreen.svg?longCache=true&style=for-the-badge)
 
 
 Log viewer is nodejs and socket.io based application which can be used to view log files stored on remote host.
@@ -19,9 +19,6 @@ logviewer is build on following stack
 * [Express] - fast node.js network app framework
 * [socket.io] - exchange message via sockets.
 
-
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
 
 ### Installation
 
@@ -42,12 +39,12 @@ requires
 * ### Client Side
 
 ```sh
-In Browser and specify the hostname where app is running and listen on port 3000
-eg : http://localhost:300
+In Browser specify url of the hostname where app is running with port 3000
+eg : http://localhost:3000
 ```
 
 ###### Things to watch out !!!!
-[why socket io is not real websockets based ocnnection](https://davidwalsh.name/websocket)
+[How socket io works](https://davidwalsh.name/websocket)
 
 
 [web socket vs socket.io](https://stackoverflow.com/questions/10112178/differences-between-socket-io-and-websockets)
