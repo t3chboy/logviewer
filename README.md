@@ -7,6 +7,7 @@ View remote log files and get updates from them like running tail -f command and
 [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)]()
 [![Open Source Love svg3](https://badges.frapsoft.com/os/v3/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
+<meta name="google-site-verification" content="_hDGY6PDNuKGOaS9PtiK2EvJR9aRBsJeabwr8n2FzWM" />
 
 
 Log viewer is nodejs and socket.io based application which can be used to view log files stored on remote host.
